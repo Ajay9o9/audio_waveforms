@@ -11,6 +11,9 @@ import 'player_controller.dart';
 class RecorderController extends ChangeNotifier {
   final List<double> _waveData = [];
 
+  final List<double> _rawWaveData = []; // New list to store original values
+  List<double> get rawWaveData => _rawWaveData; // Getter for original values
+
   /// At which rate waveform needs to be updated
   Duration updateFrequency = const Duration(milliseconds: 100);
 
@@ -379,7 +382,8 @@ class RecorderController extends ChangeNotifier {
   void _normalise(double peak) {
     final absDb = peak.abs();
     _maxPeak = max(absDb, _maxPeak);
-
+    // Store original peak value to _originalWaveData list
+    rawWaveData.add(peak);
     // calculates min value
     _currentMin = _waveData.fold(
       0,
